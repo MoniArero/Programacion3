@@ -1,0 +1,47 @@
+------
+title: "Tarea 1"
+author: "Mónica Arellano"
+date: "5 de febrero de 2017"
+output: html_document
+------
+
+##Calificaciones
+
+
+###Primer Semestre
+#####(Otoño 2015)
+
+Curso                                 | Calificaciòn  |
+--------------------------------------|-------------- 
+Concepto de cálculo       | 10      
+Programación Actuarial I        | 10
+Introducción a la profesión actuarial      | 7
+Matemáticas básicas     | 8
+Problemas de matemáticas básicas      | 8
+DHPC      | 9
+
+
+###Segundo semestre
+#####(Primavera 2016)
+
+Curso                                 | Calificaciòn |
+--------------------------------------|--------------
+Programación Actuarial II     | 5
+Teoría del interes I           | 7
+Cálculo diferencial          | 5
+Teoría de ecuaciones          | 7
+Microeconomía                | 9   
+Geometría analítica         | 10
+
+
+###Tercer sementre
+####(Otoño 2016)
+
+Curso                                 | Calificaciòn      |
+--------------------------------------|--------------
+Macroeconomia     | 9
+Programación Actuarial II      | 8
+Formación humana y social      | 9
+Teoría del interes II          | 8
+Calculo diferencial            | 9
+Algebra lienal                 | 5
