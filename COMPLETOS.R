@@ -1,5 +1,6 @@
-setwd("~/GitHub/Programacion3/specdata")
+
 completos<- function(directorio,id=1:332){
+    setwd(directorio)
     informacion<- numeric()
   
         for (n in id){
@@ -23,4 +24,4 @@ completos<- function(directorio,id=1:332){
     data1 <- data.frame(id=ID, nobs=informacion)
     print(data1)
 }
-completos( specdata, 1:2)
+completos("~/GitHub/Programacion3/specdata", 1:2)

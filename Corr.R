@@ -1,6 +1,6 @@
-setwd("~/GitHub/Programacion3/specdata")
+
 corr <- function(directorio, horizonte=0){
-    
+    setwd(directorio)
     cor <- vector("numeric",0)
     m <- 1
     for (n in 1:332){
@@ -19,5 +19,4 @@ corr <- function(directorio, horizonte=0){
     }
     cor
 }
-cr <- corr("specdata", 150)
-head(cr)
+corr("~/GitHub/Programacion3/specdata", 150)
