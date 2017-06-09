@@ -1,0 +1,113 @@
+---
+title: "Readme"
+author: "Dulce Rodr??guez"
+date: "9/6/2017"
+output: html_document
+---
+
+#Benemerita Universidad Aut??noma de Puebla 
+##Caso3: Reconocimiento de actividad humana con celulares 
+#En este caso utilizamos herramientas de R para la limpieza y orden 
+#de datos de acelerometros colocados en los celulares y despues llegar 
+#a ciertas conclusiones y asi tomar decisiones adecuadas para mas 
+#informaci??n
+
+http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones 
+
+informacion sobre analisis de datos 
+
+http://www.insideactivitytracking.com/datascienceactivitytrackingandthebattlefortheworldstopsp
+ortsbrand/ 
+    
+Los datos utilizados en este caso pueden ser descargados de la siguiente liga 
+
+https://www.dropbox.com/s/j26ksrw1jzqz2a1/getdata-projectfilesUCI%20HAR%20Dataset.zip?dl=0
+
+#Los archivos que se van a encontrar en este caso son:
+    "Readme.md"
+    "CodeBook.md"
+    "correr.analisis.R"
+    
+#El archivo "correr.analisis.R" hara lo siguiente 
+
+ ##1.-Une los datos de los archivos test con los de los archivos training, para crear un solo conjunto de datos.
+
+ ##2.-Extrae las medidas de media y desviaci??n est??ndar de cada medici??n.
+
+ ##3.-Luego usa nombres de actividad correspondientes para describir los nombres de las actividades en la base de datos.
+
+ ##4.-Coloca los nombres apropiados en la base de datos con etiquetas de variables que las describan.
+
+ ##5.-Se crea una segunda base de datos con el promedio de cada variable para cada actividad y cada sujeto.
+
+#El codigo realiza lo siguiente:
+
+     ##1.- Une los datos de los archivos test con los de los archivos training, para crear un solo conjunto de datos.   
+pruebaX <- read.table("test/X_test.txt")
+pruebaY <- read.table("test/Y_test.txt")
+pruebaZ <- read.table("./train/subject_train.txt")
+
+trainX <- read.table("train/X_train.txt")
+trainY <- read.table("train/Y_train.txt")
+trainZ <- read.table("./train/subject_train.txt")
+
+infoX <- rbind(trainX, pruebaX)
+infoY <- rbind(trainY, pruebaY)
+infoZ <- rbind(trainZ, pruebaZ)
+
+    ##2.-Borra las variables que ya no se necesitan 
+remove(trainX,trainY,trainZ,pruebaX,pruebaY,pruebaZ)
+
+    ##3.-Extrae las medidas de media y desviaci??n est??ndar de cada medicion 
+features<- read.table("features.txt")[,2]
+colnames(infoX) <- features
+medias <- grep('-(mean|std)\\(',features) 
+infoX <- subset(infoX,select=medias)     
+
+    ##4.-Coloca etiquetas apropiadas en la base de datos con nombres de variables que las describan
+colnames(infoX) <- sub("mean", "Mean", colnames(infoX))
+colnames(infoX) <- sub("std", "Std", colnames(infoX))
+colnames(infoX) <- sub("t", "Time", colnames(infoX))
+colnames(infoX) <- sub("f", "Frequency", colnames(infoX))
+colnames(infoX) <- sub("\\(\\)", "", colnames(infoX))
+colnames(infoX) <- sub("-", "", colnames(infoX))
+colnames(infoX) <- sub("BodyBody", "Body", colnames(infoX))
+colnames(infoX) <- sub("^", "MeanOf", colnames(infoX))
+colnames(infoX)
+
+   ##5.-Usa nombres de actividad para describir los nombres de las actividades en la base de datos
+Primero asignamos la direcci??n, despu??s tomamos los argumentos y combinamos por filas.
+
+act_train <- read.table(paste("train/y_train.txt"))
+act_test <- read.table(paste("test/y_test.txt"))
+act <- rbind(act_train,act_test)[,1]
+
+   ##6.-En la muestra hay seis actividades diferentes, que se utilizaran para describir los nombres en la base de datos.
+labels <- c("WALKING", "WALKING_UPSTAIRS", "WALKING_DOWNSTAIRS",
+            "SITTING", "STANDING", "LAYING")
+
+act <- labels[act]
+infoX <- cbind(Act = act,infoX)
+
+   ##7.-Con los datos del inciso 4, creamos una segunda base de datos con el promedio de cada variable para cada actividad y cada voluntario.
+En la direcci??n que nos lleva a los voluntarios, 30 en total. 
+Combinamos por filas luego actualizamos datos_set para que los voluntarios aparezcan en columna.
+
+v_train <- read.table(paste("train/subject_train.txt"))
+v_test <- read.table(paste("test/subject_test.txt"))
+v <- rbind(v_train,v_test)[,1]
+infoX <- cbind(V = v,infoX) 
+
+ ##Utilizamos el paquete dplyr (previamente instalado) para manejar nuestros datos de una manera m??s sencilla. 
+Creamos una segunda base de datos donde apareceran los promedios de cada variable para cada actividad y cada voluntario.
+
+library(dplyr) 
+prom_data_set <- infoX %>% group_by(V,Act) %>% summarise_each(funs(mean))
+
+##Por ??ltimo creamos un archivo llamado "tidy_data_set.txt" donde aparecer?? la base de datos ordenada.
+
+write.table(prom_data_set,row.name = FALSE,file = "datos_set.txt")    
+
+
+
+
